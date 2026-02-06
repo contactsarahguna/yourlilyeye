@@ -10,16 +10,16 @@
       height: 100vh;
       margin: 0;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     h2 {
       position: absolute;
       top: 30px;
+      width: 100%;
+      text-align: center;
       font-weight: normal;
       letter-spacing: 1px;
+      z-index: 2;
     }
 
     .room {
@@ -30,9 +30,10 @@
 
     .girl {
       position: absolute;
-      font-size: 40px;
+      font-size: 42px;
       cursor: pointer;
       transition: transform 0.2s;
+      z-index: 2;
     }
 
     .girl:hover {
@@ -47,6 +48,7 @@
       font-size: 15px;
       color: #ff3366;
       animation: shake 0.4s;
+      z-index: 2;
     }
 
     .hidden {
@@ -54,16 +56,16 @@
     }
 
     .final {
-      position: absolute;
+      position: fixed;
       inset: 0;
-      background: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.96);
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
       font-size: 22px;
+      z-index: 10;
       animation: pop 0.6s ease;
-      z-index: 5;
     }
 
     @keyframes shake {
@@ -79,14 +81,15 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    /* fireworks */
+    /* Fireworks */
     .spark {
-      position: absolute;
+      position: fixed;
       width: 6px;
       height: 6px;
-      background: pink;
       border-radius: 50%;
       animation: explode 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 9;
     }
 
     @keyframes explode {
@@ -102,28 +105,28 @@
 <h2>choose the right option</h2>
 
 <div class="room">
-  <!-- Decoy girls -->
-  <div class="girl" style="top: 30%; left: 20%;" onclick="wrongPick()">👱🏻‍♀️</div>
-  <div class="girl" style="top: 55%; left: 70%;" onclick="wrongPick()">👩🏼‍🦰</div>
-  <div class="girl" style="top: 40%; left: 50%;" onclick="wrongPick()">👩🏻‍🦳</div>
-  <div class="girl" style="top: 65%; left: 30%;" onclick="wrongPick()">👩🏾‍🦱</div>
+  <!-- Wrong options -->
+  <div class="girl" style="top:30%; left:20%;" onclick="wrongPick()">👱🏻‍♀️</div>
+  <div class="girl" style="top:55%; left:65%;" onclick="wrongPick()">👩🏼‍🦰</div>
+  <div class="girl" style="top:40%; left:45%;" onclick="wrongPick()">👩🏻‍🦳</div>
+  <div class="girl" style="top:65%; left:30%;" onclick="wrongPick()">👩🏾‍🦱</div>
 
   <!-- Sarah -->
-  <div class="girl" style="top: 45%; left: 75%;" onclick="rightPick(event)">
+  <div class="girl" style="top:45%; left:75%;" onclick="rightPick(this)">
     👩🏽‍🦱
   </div>
 
   <div id="penalty" class="penalty hidden"></div>
+</div>
 
-  <div id="final" class="final hidden">
-    🎉✨  
-    <br><br>
-    yay! she’s your little yeye  
-    <br>
-    let me be your only one forever  
-    <br><br>
-    🤍♾️
-  </div>
+<div id="final" class="final hidden">
+  🎉✨  
+  <br><br>
+  yay! she’s your little yeye  
+  <br>
+  let me be your only one forever  
+  <br><br>
+  🤍♾️
 </div>
 
 <script>
@@ -140,28 +143,7 @@
     p.textContent = penalties[Math.floor(Math.random() * penalties.length)];
   }
 
-  function rightPick(e) {
-    fireworks(e.clientX, e.clientY);
-    setTimeout(() => {
-      document.getElementById("final").classList.remove("hidden");
-    }, 400);
-  }
+  function rightPick(el) {
+    const rect = el.getBoundingClientRect();
+    fire
 
-  function fireworks(x, y) {
-    for (let i = 0; i < 25; i++) {
-      const s = document.createElement("div");
-      s.className = "spark";
-      s.style.left = x + "px";
-      s.style.top = y + "px";
-      s.style.background =
-        ["#ff5c8a", "#ffc3d4", "#ff99aa", "#ffd1dc"][Math.floor(Math.random() * 4)];
-      s.style.setProperty("--x", (Math.random() * 200 - 100) + "px");
-      s.style.setProperty("--y", (Math.random() * 200 - 100) + "px");
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1000);
-    }
-  }
-</script>
-
-</body>
-</html>
